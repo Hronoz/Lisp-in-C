@@ -1,11 +1,3 @@
-#include <editline/readline.h>
-#include <errno.h>
-#include <math.h>
-#include <stdarg.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "mpc.h"
 #include "lisp.h"
 
 #define LASSERT(args, cond, fmt, ...)                                  \

@@ -1,8 +1,3 @@
-#include <errno.h>
-#include <math.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "lisp.h"
 
 #ifdef _WIN32
