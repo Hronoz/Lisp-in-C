@@ -50,6 +50,13 @@ lval *builtin_mul(lenv *e, lval *a);
 lval *builtin_div(lenv *e, lval *a);
 lval *builtin_def(lenv *e, lval *a);
 lval *builtin_put(lenv *e, lval *a);
+lval *builtin_gt(lenv *e, lval *a);
+lval *builtin_lt(lenv *e, lval *a);
+lval *builtin_ge(lenv *e, lval *a);
+lval *builtin_le(lenv *e, lval *a);
+lval *builtin_ord(lenv *e, lval *a, char *op);
+lval *builtin_cmp(lenv *e, lval *a, char *op);
+lval *builtin_if(lenv *e, lval *a);
 lval *builtin_lambda(lenv *e, lval *a);
 lval *builtin(lenv *e, lval *a, char *func);
 
