@@ -2,15 +2,48 @@
 #define LISP_H
 #include "mpc.h"
 
+extern mpc_parser_t *Number;
+extern mpc_parser_t *Symbol;
+extern mpc_parser_t *Comment;
+extern mpc_parser_t *Sexpr;
+extern mpc_parser_t *Qexpr;
+extern mpc_parser_t *String;
+extern mpc_parser_t *Expr;
+extern mpc_parser_t *Lispy;
+
 typedef struct lenv lenv;
 typedef struct lval lval;
+typedef lval *(*lbuiltin)(lenv *, lval *);
 
-enum { LVAL_NUM, LVAL_ERR, LVAL_SYM,
+struct lval {
+    size_t type;
+    size_t count;
+
+    long num;
+    char *err;
+    char *sym;
+    char *str;
+
+    /* function-related fields */
+    lbuiltin builtin;
+    lenv *env;
+    lval *formals;
+    lval *body;
+
+    lval **cell;
+}; /* lval stands for lisp value */
+
+struct lenv {
+    lenv *par;
+    size_t count;
+    char **syms;
+    lval **vals;
+};
+
+enum { LVAL_NUM, LVAL_ERR, LVAL_SYM, LVAL_STR,
        LVAL_FUN, LVAL_SEXPR, LVAL_QEXPR };
 
 enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
-
-typedef lval *(*lbuiltin)(lenv *, lval *);
 
 char *ltype_name(size_t t);
 
@@ -21,10 +54,12 @@ lval *lval_err(char *fmt, ...);
 lval *lval_sym(char *s);
 lval *lval_sexpr(void);
 lval *lval_qexpr(void);
+lval *lval_str(char *s);
 lval *lval_fun(lbuiltin func);
 void lval_delete(lval *v);
 lval *lval_add(lval *v, lval *x);
 lval *lval_read_num(mpc_ast_t *node);
+lval *lval_read_str(mpc_ast_t *node);
 lval *lval_read(mpc_ast_t *node);
 void lval_print(lval *v);
 lval *lval_pop(lval *v, size_t i);
@@ -59,6 +94,8 @@ lval *builtin_cmp(lenv *e, lval *a, char *op);
 lval *builtin_if(lenv *e, lval *a);
 lval *builtin_lambda(lenv *e, lval *a);
 lval *builtin(lenv *e, lval *a, char *func);
+lval *builtin_load(lenv *e, lval *a);
+lval *builtin_print(lenv *e, lval *a);
 
 lenv *lenv_new(void);
 void lenv_delete(lenv *e);
